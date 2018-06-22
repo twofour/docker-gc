@@ -72,12 +72,14 @@ trap "rm -f -- '$PIDFILE'" EXIT
 echo $$ > $PIDFILE
 
 EXCLUDE_FROM_GC=${EXCLUDE_FROM_GC:=/etc/docker-gc-exclude}
+printf "$EXCLUDE_IMAGES" > $EXCLUDE_FROM_GC
 if [ ! -f "$EXCLUDE_FROM_GC" ]
 then
   EXCLUDE_FROM_GC=/dev/null
 fi
 
 EXCLUDE_CONTAINERS_FROM_GC=${EXCLUDE_CONTAINERS_FROM_GC:=/etc/docker-gc-exclude-containers}
+printf "$EXCLUDE_CONTAINERS" > $EXCLUDE_CONTAINERS_FROM_GC
 if [ ! -f "$EXCLUDE_CONTAINERS_FROM_GC" ]
 then
   EXCLUDE_CONTAINERS_FROM_GC=/dev/null
@@ -85,7 +87,6 @@ fi
 
 EXCLUDE_IDS_FILE="exclude_ids"
 EXCLUDE_CONTAINER_IDS_FILE="exclude_container_ids"
-
 function date_parse {
   if date --utc >/dev/null 2>&1; then
     # GNU/date
@@ -325,11 +326,14 @@ if [[ $REMOVE_VOLUMES -gt 0 ]]; then
     $DOCKER volume ls --filter "dangling=true" -q &> /dev/null
     VOLUMES=$?
     set -e
+    
     # If docker volume ls fails, then is probably not supported by either client or server
+    EXCLUDE_VOLUMES_IDS_FILE=${EXCLUDE_VOLUMES_IDS_FILE:=/etc/exclude-volumes}
+    printf "$EXCLUDE_VOLUME_IDS" > $EXCLUDE_VOLUMES_IDS_FILE
     if [ ! -f "$EXCLUDE_VOLUMES_IDS_FILE" ]
     then
         EXCLUDE_VOLUMES_IDS_FILE=/dev/null
-    fi
+    fi    
 
     if [[ $VOLUMES -gt 0 ]]; then
         set +e
