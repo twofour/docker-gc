@@ -74,7 +74,7 @@ echo $$ > $PIDFILE
 EXCLUDE_FROM_GC=${EXCLUDE_FROM_GC:=/etc/docker-gc-exclude}
 if [[ !  -z $EXCLUDE_IMAGES ]]
 then
-  printf $EXCLUDE_IMAGES > $EXCLUDE_FROM_GC
+  echo "$EXCLUDE_IMAGES" > $EXCLUDE_FROM_GC
 fi
 if [ ! -f "$EXCLUDE_FROM_GC" ]
 then
@@ -84,7 +84,7 @@ fi
 EXCLUDE_CONTAINERS_FROM_GC=${EXCLUDE_CONTAINERS_FROM_GC:=/etc/docker-gc-exclude-containers}
 if [[ !  -z $EXCLUDE_CONTAINERS ]]
 then
-  printf $EXCLUDE_CONTAINERS > $EXCLUDE_CONTAINERS_FROM_GC
+  echo "$EXCLUDE_CONTAINERS" > $EXCLUDE_CONTAINERS_FROM_GC
 fi
 if [ ! -f "$EXCLUDE_CONTAINERS_FROM_GC" ]
 then
@@ -337,7 +337,7 @@ if [[ $REMOVE_VOLUMES -gt 0 ]]; then
     EXCLUDE_VOLUMES_IDS_FILE=${EXCLUDE_VOLUMES_IDS_FILE:=/etc/exclude-volumes}
     if [[ !  -z $EXCLUDE_VOLUME_IDS ]]
     then
-      printf $EXCLUDE_VOLUME_IDS > $EXCLUDE_VOLUMES_IDS_FILE
+      echo "$EXCLUDE_VOLUME_IDS" > $EXCLUDE_VOLUMES_IDS_FILE
     fi
     if [ ! -f "$EXCLUDE_VOLUMES_IDS_FILE" ]
     then
